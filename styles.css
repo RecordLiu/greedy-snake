@@ -1,0 +1,608 @@
+/* 游戏容器布局 */
+#gameContainer {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin: 60px auto 0; /* 增加更多顶部边距，为记分榜预留空间 */
+    padding: 0;
+}
+
+/* 画布包装器 */
+#canvasWrapper {
+    position: relative;
+    width: 600px;
+    height: 600px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 15px;
+}
+
+/* 游戏画布样式 */
+#gameCanvas {    
+    border: 1px solid #ccc;    
+    display: block;    
+    background: #fff linear-gradient(90deg, rgba(0, 0, 0, 0.03) 1px, transparent 1px), 
+                linear-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 1px); /* 添加轻微的网格线 */
+    background-size: 20px 20px;    
+    border-radius: 10px;    
+    margin-top: 10px; /* 向下移动10px */
+}
+
+/* 右侧面板样式 */
+#gamePanel {
+    position: fixed;
+    right: -250px; /* 隐藏面板主体 */
+    top: 250px; /* 调整位置，居中对齐游戏画布 */
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 20px;
+    padding-left: 50px; /* 增加左侧内边距，为按钮留出空间 */
+    background-color: #f7f7f7;
+    border-radius: 15px 0 0 15px;
+    box-shadow: 2px 2px 8px rgba(0,0,0,0.08);
+    width: 200px;
+    border: 1.5px solid #cccccc; /* 从dashed改为solid，保持手绘感但使用实线 */
+    transition: all 0.3s ease-in-out;
+    z-index: 1000;
+    overflow: visible; /* 允许按钮溢出 */
+    transform: rotate(-0.5deg); /* 轻微倾斜，增加手绘感 */
+}
+
+#gamePanel.expanded {
+    right: 0;
+}
+
+/* 按钮样式 */
+#instructionsToggle {
+    position: absolute; /* 相对于父元素定位 */
+    left: 0; /* 贴在面板左侧 */
+    top: 50px; /* 垂直位置 */
+    width: 35px;
+    height: 95px;
+    background-color: #aaaaaa;
+    color: white;
+    border: none;
+    border-radius: 0; /* 重置所有圆角 */
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-shadow: -1px 2px 6px rgba(0,0,0,0.1);
+    z-index: 1001; /* 确保按钮始终可见 */
+    padding: 0;
+    transition: all 0.3s ease; /* 添加过渡效果 */
+    transform: rotate(-1deg); /* 轻微倾斜，增加手绘感 */
+}
+
+/* 未展开状态下的按钮，拉到右侧边缘 */
+#gamePanel:not(.expanded) #instructionsToggle {
+    left: -35px; /* 将按钮向左拉，使其在面板外侧可见 */
+    border-radius: 12px 0 0 12px; /* 增加圆角大小：从8px改为12px */
+}
+
+/* 展开状态下的按钮 */
+#gamePanel.expanded #instructionsToggle {
+    border-radius: 0 12px 12px 0; /* 增加圆角大小：从8px改为12px */
+}
+
+#instructionsToggle span {
+    writing-mode: vertical-rl;
+    text-align: center;
+    user-select: none;
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 1.5px;
+    font-family: 'Comic Sans MS', 'Marker Felt', cursive; /* 使用手绘风格字体 */
+}
+
+#gamePanel.expanded #instructionsToggle span {
+    writing-mode: vertical-rl;
+}
+
+#instructionsToggle:hover {
+    background-color: #999999; /* 从#666666改为更浅的灰色 */
+    transform: rotate(-1deg) scale(1.05); /* 悬停时轻微放大 */
+}
+
+.panel-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #ccc, transparent);
+    margin: 5px 0;
+}
+
+/* 记分榜样式 */
+#scoreBoard {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#scoreBoard h3 {
+    margin: 0 0 5px 0;
+    color: #333;
+    font-size: 18px;
+    text-align: center;
+    padding-bottom: 5px;
+}
+
+#scoreBoard p {
+    margin: 0;
+    white-space: nowrap;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+/* 游戏操作说明样式 */
+#gameInstructions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-left: 0; /* 重置边距 */
+    font-family: 'Comic Sans MS', 'Marker Felt', cursive; /* 使用手绘风格字体 */
+}
+
+#gameInstructions h3 {
+    margin: 0 0 8px 0;
+    color: #777777;
+    font-size: 18px;
+    text-align: center;
+    padding-bottom: 5px;
+    font-weight: 500;
+    font-family: 'Comic Sans MS', 'Marker Felt', cursive; /* 使用手绘风格字体 */
+    transform: rotate(-0.5deg); /* 轻微倾斜 */
+}
+
+.instruction-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+/* 键盘布局样式 */
+.keyboard-layout {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 5px 0;
+    position: relative;
+    margin-left: 0; /* 确保键盘布局不被按钮遮挡 */
+}
+
+.key-row {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    margin: 2px 0;
+    position: relative;
+}
+
+.key-hint {
+    position: absolute;
+    font-size: 11px;
+    color: #777777;
+    font-weight: normal;
+    white-space: nowrap;
+    font-family: 'Comic Sans MS', 'Marker Felt', cursive; /* 使用手绘风格字体 */
+}
+
+.hint-up {
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.hint-down {
+    bottom: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.hint-pause {
+    bottom: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.hint-left {
+    left: -5px;
+    top: 50%;
+    transform: translateY(-50%) translateX(-100%);
+}
+
+.hint-right {
+    right: -5px;
+    top: 50%;
+    transform: translateY(-50%) translateX(100%);
+}
+
+.spacer {
+    width: 36px;
+    height: 36px;
+}
+
+.key {
+    background-color: #eeeeee;
+    border: 1.5px solid #cccccc;
+    border-radius: 7px;
+    padding: 5px 0;
+    font-weight: 500;
+    box-shadow: 1px 3px 3px rgba(0,0,0,0.08);
+    min-width: 36px;
+    height: 36px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    color: #777777;
+    transform: rotate(0.5deg); /* 按键倾斜，增加不规则感 */
+    font-family: 'Arial Rounded MT Bold', 'Arial', sans-serif; /* 圆润字体 */
+}
+
+.key:hover {
+    background-color: #e6e6e6;
+    transform: translateY(2px) rotate(0.5deg);
+    box-shadow: 1px 1px 2px rgba(0,0,0,0.08);
+}
+
+.desc {
+    font-size: 14px;
+}
+
+.tip {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #e0e0e0;
+}
+
+.tip p {
+    margin: 0 0 5px 0;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.tip ul {
+    margin: 0;
+    padding-left: 20px;
+    font-size: 13px;
+}
+
+.tip li {
+    margin-bottom: 5px;
+    line-height: 1.4;
+}
+
+.form-check-inline {
+    display: inline-flex;
+    align-items: center;
+    padding-right: 1rem;
+}
+
+.form-check-input {
+    margin-right: 0.5rem;
+}
+
+.form-check-label {
+    margin-bottom: 0;
+}
+
+/* 添加开始按钮居中显示 */
+#startButton {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 100;
+}
+
+#startButton, #restartButton {
+    padding: 18px 36px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    border-radius: 25px;
+    background: linear-gradient(135deg, #4CAF50 0%, #81C784 100%);
+    color: white;
+    border: none;
+    box-shadow: 0 8px 24px rgba(76, 175, 80, 0.3);
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    white-space: nowrap;
+}
+
+#startButton::after, #restartButton::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 300%;
+    height: 300%;
+    background: rgba(255, 255, 255, 0.15);
+    transform: translate(-50%, -50%) rotate(45deg);
+    transition: all 0.5s;
+    pointer-events: none;
+}
+
+#startButton:hover, #restartButton:hover {
+    transform: translate(-50%, -50%) scale(1.08);
+    box-shadow: 0 12px 32px rgba(76, 175, 80, 0.4);
+}
+
+#startButton:hover::after, #restartButton:hover::after {
+    transform: translate(-50%, -50%) rotate(45deg) translateX(-100%);
+}
+
+#startButton:active, #restartButton:active {
+    transform: translate(-50%, -50%) scale(0.98);
+    box-shadow: 0 6px 16px rgba(76, 175, 80, 0.3);
+}
+
+/* 在canvas容器添加相对定位 */
+body > div > div:first-child {
+    position: relative;
+    display: inline-block; /* 保持canvas容器包裹内容 */
+}
+
+body > div {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 400px;
+    padding: 20px 0;
+}
+
+.close-btn {
+    position: absolute;
+    top: -12px;
+    right: -12px;
+    width: 24px;
+    height: 24px;
+    background: #ff4444;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    cursor: pointer;
+    z-index: 101;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.close-btn:hover {
+    background: #ff0000;
+    transform: scale(1.1);
+}
+
+#reselectButton {
+    /* 复用原有按钮样式 */
+    padding: 18px 36px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    border-radius: 25px;
+    background: linear-gradient(135deg, #FF9800 0%, #FFB74D 100%);
+    box-shadow: 0 8px 24px rgba(255, 152, 0, 0.3);
+    color: white;
+    border: none;
+    box-shadow: 0 8px 24px rgba(33, 150, 243, 0.3);
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    white-space: nowrap;
+}
+
+#reselectButton:hover {
+    box-shadow: 0 12px 32px rgba(255, 152, 0, 0.4);
+}
+
+#reselectButton:active {
+    transform: scale(0.98);
+    box-shadow: 0 6px 16px rgba(33, 150, 243, 0.3);
+}
+
+#restartContainer {
+    flex-direction: row !important;
+    gap: 20px !important;
+}
+
+#restartContainer > button {
+    pointer-events: auto; /* 恢复按钮点击 */
+    margin: 8px 0; /* 增加按钮间距 */
+}
+
+#restartButton {
+    /* 保持原有绿色样式 */
+    background: linear-gradient(135deg, #4CAF50 0%, #81C784 100%);
+    box-shadow: 0 8px 24px rgba(76, 175, 80, 0.3);
+}
+
+#restartButton:hover {
+    box-shadow: 0 12px 32px rgba(76, 175, 80, 0.4);
+}
+
+/* 统一按钮基础样式 */
+#restartButton, #reselectButton {
+    padding: 18px 36px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    border-radius: 25px;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    white-space: nowrap;
+    transform: scale(1); /* 修复缩放基准值 */
+}
+
+#difficultySelector {
+    position: absolute;
+    bottom: -25px; /* 从-35px改为-25px，进一步缩短与游戏画布间距 */
+    left: 50%;
+    transform: translateX(-250px); /* 向左移动画布宽度的一半(500px/2)，与画布左对齐 */
+    display: flex;
+    justify-content: center; /* 改为居中对齐 */
+    margin: 0;
+    padding: 8px 15px; /* 增加左右内边距 */
+    background-color: rgba(245, 245, 245, 0.5);
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    width: 500px; /* 与游戏画布宽度保持一致 */
+    box-sizing: border-box; /* 确保内边距包含在宽度内 */
+}
+
+.difficulty-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center; /* 容器内容居中 */
+    gap: 15px;
+    width: 100%; /* 使用完整宽度 */
+}
+
+.difficulty-label {
+    font-size: 15px;
+    font-weight: 400;
+    color: #777777;
+    letter-spacing: 0.8px;
+    font-family: 'Comic Sans MS', 'Marker Felt', cursive; /* 使用更手绘风格的字体 */
+    transform: rotate(-1deg); /* 轻微倾斜，增加手绘感 */
+}
+
+.difficulty-options {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+
+.difficulty-option {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: transform 0.2s ease;
+}
+
+.difficulty-option:hover {
+    transform: scale(1.05);
+}
+
+.difficulty-option input {
+    margin: 0;
+    appearance: none;
+    width: 14px;
+    height: 14px;
+    border: 1.5px solid #888888;
+    border-radius: 50%;
+    background-color: transparent;
+    position: relative;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.difficulty-option input:checked {
+    background-color: #888888;
+}
+
+.difficulty-option input:checked::after {
+    content: '';
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: #ffffff;
+}
+
+.difficulty-option label {
+    margin: 0;
+    font-size: 14px;
+    color: #777777;
+    cursor: pointer;
+    font-family: 'Comic Sans MS', 'Marker Felt', cursive; /* 使用更手绘风格的字体 */
+    transform: rotate(1deg); /* 轻微反向倾斜，增加不规则感 */
+    transition: all 0.2s ease;
+}
+
+.difficulty-option:hover label {
+    transform: scale(1.05) rotate(1deg); /* 悬停时轻微放大 */
+}
+
+#gameModeSelect {
+    display: none;
+}
+
+#scoreDisplay {
+    position: absolute;
+    top: -60px; /* 从-53px改为-60px，与游戏画布间距变为20px */
+    left: 50%;
+    transform: translateX(-250px); /* 向左移动画布宽度的一半(500px/2)，实现左对齐 */
+    display: flex;
+    padding: 5px 0;
+    width: 500px; /* 与游戏画布宽度一致 */
+    text-align: left;
+}
+
+.score-container {
+    padding: 6px 0;
+    width: 100px; /* 进一步减小宽度 */
+    text-align: left;
+}
+
+.current-score, .high-score {
+    font-size: 14px;
+    font-weight: 400;
+    color: #777777;
+    margin: 6px 0;
+    white-space: nowrap;
+}
+
+.current-score span, .high-score span {
+    color: #777777;
+    margin-left: 5px;
+    display: inline-block;
+    min-width: 15px; /* 相应减小数字预留宽度 */
+    text-align: right;
+}
+
+/* 游戏说明文字样式 */
+.game-description {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.game-description p {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #777777;
+    font-family: 'Comic Sans MS', 'Marker Felt', cursive; /* 使用手绘风格字体 */
+}
+
+/* 游戏标题样式 - 使用高特异性选择器确保样式生效 */
+body h1#gameTitle {
+    text-align: center;
+    color: #777777 !important; /* 与计分板文案颜色保持一致 */
+    margin: 20px 0 30px;
+    font-size: 36px;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    letter-spacing: 2px;
+    position: relative;
+}
+
+/* 隐藏游戏标题下方的横线 */
+body h1#gameTitle::after {
+    display: none;
+}

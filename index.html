@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>贪吃蛇游戏</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1 id="gameTitle">贪吃蛇游戏</h1>
+    <div id="gameContainer">
+        <div id="canvasWrapper">
+            <div id="scoreDisplay" style="margin-bottom: 10px;">
+                <div class="score-container">
+                    <div class="current-score">当前分数: <span id="score">0</span></div>
+                    <div class="high-score">历史最高: <span id="highScore">0</span></div>
+                </div>
+            </div>
+            <canvas id="gameCanvas" width="500" height="500"></canvas>
+            <button id="startButton">开始游戏</button>
+            <div id="difficultySelector">
+                <div class="difficulty-container">
+                    <span class="difficulty-label">游戏难度：</span>
+                    <div class="difficulty-options">
+                        <div class="difficulty-option">
+                            <input class="form-check-input" type="radio" name="gameMode" id="easyMode" value="easy" checked>
+                            <label class="form-check-label" for="easyMode">简单</label>
+                        </div>
+                        <div class="difficulty-option">
+                            <input class="form-check-input" type="radio" name="gameMode" id="mediumMode" value="medium">
+                            <label class="form-check-label" for="mediumMode">中等</label>
+                        </div>
+                        <div class="difficulty-option">
+                            <input class="form-check-input" type="radio" name="gameMode" id="hardMode" value="hard">
+                            <label class="form-check-label" for="hardMode">困难</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="gamePanel">
+            <button id="instructionsToggle">
+                <span>游戏操作</span>
+            </button>
+            <div id="gameInstructions">
+                <h3>游戏操作</h3>
+                <div class="game-description">
+                    <p>在游戏画面下方选择游戏难度，点击开始游戏，使用以下按键进行操作游戏：</p>
+                </div>
+                <div class="keyboard-layout">
+                    <div class="key-row">
+                        <div class="spacer"></div>
+                        <div class="key">↑
+                            <span class="key-hint hint-up">向上移动</span>
+                        </div>
+                        <div class="spacer"></div>
+                    </div>
+                    <div class="key-row">
+                        <div class="key">←
+                            <span class="key-hint hint-left">向左移动</span>
+                        </div>
+                        <div class="key">↓
+                            <span class="key-hint hint-down">向下移动</span>
+                        </div>
+                        <div class="key">→
+                            <span class="key-hint hint-right">向右移动</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="key-row" style="margin-top: 15px; justify-content: center;">
+                    <div class="key">S
+                        <span class="key-hint hint-pause">暂停/继续游戏</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
